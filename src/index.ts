@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient, ObjectId, ServerApiVersion } from "mongodb";
 
 dotenv.config();
 
@@ -31,10 +31,16 @@ async function run() {
     const db = client.db("task-flow");
     const tasks = db.collection("tasks");
 
-    // app.get("/tasks", async (req, res) => {
-    //   const tasks = await tasks.find({}).toArray();
-    //   res.json(tasks);
-    // });
+    app.get("/api/tasks", async (req, res) => {
+      const result = await tasks.find({}).toArray();
+      res.json(result);
+    });
+
+    app.get("/api/tasks/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await tasks.findOne({ _id: new ObjectId(id) });
+      res.json(result);
+    });
 
     app.post("/api/tasks", async (req, res) => {
       const task = req.body;
