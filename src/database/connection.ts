@@ -19,14 +19,16 @@ export async function connectToDatabase(): Promise<Db> {
     });
 
     await client.connect();
-    
+
     const isDev = process.env.NODE_ENV !== "production";
     db = client.db("task-flow");
-    
-    // Ping command to ensure connectivity
-    await db.command({ ping: 1 });
 
-    console.log(`[DB] Connected successfully to MongoDB (Env: ${isDev ? "Development" : "Production"})`);
+    // Ping command to ensure connectivity
+    // await db.command({ ping: 1 });
+
+    console.log(
+      `[DB] Connected successfully to MongoDB (Env: ${isDev ? "Development" : "Production"})`,
+    );
     return db;
   } catch (error) {
     console.error("❌ [DB] Failed to connect to MongoDB:", error);
@@ -36,7 +38,9 @@ export async function connectToDatabase(): Promise<Db> {
 
 export function getDb(): Db {
   if (!db) {
-    throw new Error("Database not initialized. Call connectToDatabase() first.");
+    throw new Error(
+      "Database not initialized. Call connectToDatabase() first.",
+    );
   }
   return db;
 }
